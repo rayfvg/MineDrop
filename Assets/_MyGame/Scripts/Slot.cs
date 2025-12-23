@@ -1,56 +1,134 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
-using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class Slot : MonoBehaviour
 {
-    [Header("View")]
-    public Image pickaxeRenderer;
-    public TMP_Text amountText;
+    [Header("UI")]
+    public RectTransform viewport;
+    public RectTransform reel;
+    public SlotItem itemPrefab;
 
-    [Header("Settings")]
-    public float fastSpeed = 0.05f;
-    public float slowSpeed = 0.15f;
+    [Header("Reel Settings")]
+    public int visibleItems = 3;
+    public float itemHeight = 100f;
+    public float startSpeed = 1500f;
+    public float slowSpeed = 300f;
 
-    private PickaxeConfig[] pickaxes;
-    private Tween rollTween;
+    private List<SlotItem> items = new();
+    private SymbolConfig[] pickaxes;
+    private float currentSpeed;
+    private bool isRolling;
 
-    public void Init(PickaxeConfig[] configs)
+    public void Init(SymbolConfig[] configs)
     {
         pickaxes = configs;
+
+        CreateItems();
     }
 
-    public void StartRoll(float rollDuration)
+    void CreateItems()
     {
-        rollTween?.Kill();
+        for (int i = 0; i < visibleItems + 4; i++)
+        {
+            var item = Instantiate(itemPrefab, reel);
+            item.SetRandom(pickaxes);
+            item.Rect.anchoredPosition = new Vector2(0, -i * itemHeight);
+            items.Add(item);
+        }
 
-        rollTween = DOVirtual.DelayedCall(fastSpeed, ChangeSprite)
-            .SetLoops(-1)
-            .SetEase(Ease.Linear);
-
-        DOVirtual.DelayedCall(rollDuration, StopRoll);
+        reel.sizeDelta = new Vector2(
+            reel.sizeDelta.x,
+            items.Count * itemHeight
+        );
     }
 
-    void ChangeSprite()
+    public void StartRoll(float duration)
     {
-        var p = pickaxes[Random.Range(0, pickaxes.Length)];
-        pickaxeRenderer.sprite = p.sprite;
-        amountText.text = Random.Range(1, 6).ToString();
+        currentSpeed = startSpeed;
+        isRolling = true;
+
+        DOTween.To(
+            () => currentSpeed,
+            x => currentSpeed = x,
+            slowSpeed,
+            duration
+        ).SetEase(Ease.OutCubic)
+         .OnComplete(StopRoll);
+    }
+
+    void Update()
+    {
+        if (!isRolling) return;
+
+        reel.anchoredPosition += Vector2.down * currentSpeed * Time.deltaTime;
+
+        foreach (var item in items)
+        {
+            if (item.Rect.anchoredPosition.y + reel.anchoredPosition.y < -itemHeight)
+            {
+                MoveItemToTop(item);
+            }
+        }
+    }
+
+    void MoveItemToTop(SlotItem item)
+    {
+        float topY = GetTopY() + itemHeight;
+        item.Rect.anchoredPosition = new Vector2(0, topY);
+        item.SetRandom(pickaxes);
+    }
+
+    float GetTopY()
+    {
+        float max = float.MinValue;
+        foreach (var item in items)
+            max = Mathf.Max(max, item.Rect.anchoredPosition.y);
+        return max;
     }
 
     void StopRoll()
     {
-        rollTween.Kill();
+        isRolling = false;
 
-        // финальный результат
-        var finalPickaxe = pickaxes[Random.Range(0, pickaxes.Length)];
-        int amount = Random.Range(1, 6);
+        float snapY = Mathf.Round(reel.anchoredPosition.y / itemHeight) * itemHeight;
 
-        pickaxeRenderer.sprite = finalPickaxe.sprite;
-        amountText.text = amount.ToString();
+        reel.DOAnchorPosY(snapY, 0.25f)
+            .SetEase(Ease.OutBack)
+            .OnComplete(() =>
+            {
+                SlotItem result = GetResultItem();
 
-        // небольшой punch эффект
-        transform.DOPunchScale(Vector3.one * 0.15f, 0.2f);
+                if (result != null && result.CurrentSymbol != null)
+                {
+                    Debug.Log(
+                        $"[SLOT RESULT] {result.CurrentSymbol.id}"
+                    );
+                }
+            });
+    }
+
+
+    SlotItem GetResultItem()
+    {
+        float centerY = viewport.position.y;
+        SlotItem closest = null;
+        float minDistance = float.MaxValue;
+
+        foreach (var item in items)
+        {
+            float itemY = item.Rect.position.y;
+            float distance = Mathf.Abs(itemY - centerY);
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closest = item;
+            }
+        }
+
+        return closest;
     }
 }

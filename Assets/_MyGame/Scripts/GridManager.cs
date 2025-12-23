@@ -1,15 +1,13 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 public class GridManager : MonoBehaviour
 {
     [Header("Pickaxes")]
-    public PickaxeConfig[] pickaxes;
+    public SymbolConfig[] pickaxes;
 
-    [Header("Slots (по колонкам)")]
-    public List<Slot[]> columns = new List<Slot[]>();
-
+    [Header("Columns")]
+    public SlotColumn[] columns = new SlotColumn[5];
 
     [Header("Roll Settings")]
     public float columnDelay = 0.3f;
@@ -19,13 +17,12 @@ public class GridManager : MonoBehaviour
     {
         foreach (var column in columns)
         {
-            foreach (var slot in column)
+            foreach (var slot in column.slots)
             {
                 slot.Init(pickaxes);
             }
         }
     }
-
 
     void Update()
     {
@@ -39,7 +36,7 @@ public class GridManager : MonoBehaviour
     {
         foreach (var column in columns)
         {
-            foreach (var slot in column)
+            foreach (var slot in column.slots)
             {
                 slot.StartRoll(rollTime);
             }
