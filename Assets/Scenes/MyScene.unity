@@ -780,8 +780,8 @@ MonoBehaviour:
   - blockType:
       id: Rock
       prefab: {fileID: 8556129524717463424, guid: a19a38abd2c618946aeedb3a326c95f8, type: 3}
-      hp: 3
-      reward: 30
+      hp: 2
+      reward: 2
     chance: 100
 --- !u!1001 &379568217
 PrefabInstance:
@@ -2431,7 +2431,7 @@ MonoBehaviour:
       id: Grass
       prefab: {fileID: 8072906918951965477, guid: 587dbd39614df5243a06b95268369552, type: 3}
       hp: 1
-      reward: 10
+      reward: 1
     chance: 100
 --- !u!1001 &1003036147
 PrefabInstance:
@@ -4319,8 +4319,8 @@ MonoBehaviour:
   - blockType:
       id: Dirt
       prefab: {fileID: 3305871785171563230, guid: 63dc0e18c13f99d4d93fa17a116efde3, type: 3}
-      hp: 2
-      reward: 20
+      hp: 1
+      reward: 1
     chance: 100
 --- !u!1 &1679470496
 GameObject:
@@ -4752,20 +4752,20 @@ MonoBehaviour:
   - blockType:
       id: Gold
       prefab: {fileID: 7820351407354271214, guid: 7d4f620219b72244182854c8d0621591, type: 3}
-      hp: 6
-      reward: 60
+      hp: 4
+      reward: 30
     chance: 33
   - blockType:
       id: Redstoun
       prefab: {fileID: 5226248867574503641, guid: 93346c700552fce41ab29def09d24bf2, type: 3}
-      hp: 5
-      reward: 50
+      hp: 3
+      reward: 10
     chance: 33
   - blockType:
       id: Diamond
       prefab: {fileID: 3615101226843993204, guid: ff28c433ea7d85e4dae8325791595813, type: 3}
-      hp: 7
-      reward: 70
+      hp: 5
+      reward: 50
     chance: 33
 --- !u!1 &1864884485
 GameObject:
@@ -4943,14 +4943,14 @@ MonoBehaviour:
   - blockType:
       id: Redstoun
       prefab: {fileID: 5226248867574503641, guid: 93346c700552fce41ab29def09d24bf2, type: 3}
-      hp: 5
-      reward: 50
+      hp: 3
+      reward: 10
     chance: 50
   - blockType:
       id: Rock
       prefab: {fileID: 8556129524717463424, guid: a19a38abd2c618946aeedb3a326c95f8, type: 3}
-      hp: 4
-      reward: 40
+      hp: 2
+      reward: 2
     chance: 50
 --- !u!1001 &2044566970
 PrefabInstance:
@@ -5233,14 +5233,14 @@ MonoBehaviour:
   - blockType:
       id: Diamond
       prefab: {fileID: 3615101226843993204, guid: ff28c433ea7d85e4dae8325791595813, type: 3}
-      hp: 7
-      reward: 70
+      hp: 5
+      reward: 50
     chance: 50
   - blockType:
       id: Obsidian
       prefab: {fileID: 8662748257973870468, guid: 9c08b9837be1146459ba889f00390408, type: 3}
-      hp: 8
-      reward: 70
+      hp: 6
+      reward: 100
     chance: 50
 --- !u!1001 &3596284313766811151
 PrefabInstance:
