@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7150957268853440954
 RectTransform:
   m_ObjectHideFlags: 0
@@ -92,7 +92,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8314773159346788572
 RectTransform:
   m_ObjectHideFlags: 0
@@ -165,7 +165,7 @@ GameObject:
   - component: {fileID: 253001205333885406}
   m_Layer: 5
   m_Name: ViewBlock2
-  m_TagString: Untagged
+  m_TagString: Block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -292,6 +292,12 @@ MonoBehaviour:
   maxHP: 0
   currentHP: 0
   reward: 0
+  damageStages:
+  - {fileID: 823860022352126235}
+  - {fileID: 7950384187955044394}
+  - {fileID: 7069204592765973526}
+  - {fileID: 956362626976055410}
+  - {fileID: 256648132910080302}
 --- !u!1 &3856830565193286486
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,7 +315,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6135999530485392470
 RectTransform:
   m_ObjectHideFlags: 0
@@ -384,7 +390,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1087435941794715842
 RectTransform:
   m_ObjectHideFlags: 0
@@ -459,7 +465,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6135295690193618089
 RectTransform:
   m_ObjectHideFlags: 0

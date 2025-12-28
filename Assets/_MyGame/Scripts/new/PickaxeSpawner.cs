@@ -40,6 +40,6 @@ public class PickaxeSpawner : MonoBehaviour
         GameObject obj = Instantiate(pickaxePrefab, spawnParent);
         obj.transform.localPosition = Vector3.zero;
 
-        obj.GetComponent<PickaxeController>().Init(symbol);
+        //obj.GetComponent<PickaxeController>().Init(symbol);
     }
 }

@@ -41,6 +41,7 @@ public class SlotResultManager : MonoBehaviour
     }
 
 
+
     void OnAllResultsCollected()
     {
         Debug.Log("ВСЕ СЛОТЫ ОСТАНОВИЛИСЬ");
@@ -70,7 +71,7 @@ public class SlotResultManager : MonoBehaviour
             Debug.Log($"{g.pickaxe.id} x{g.count} | dmg {g.Damage}");
         }
 
-        PickaxeSpawner.Instance.SpawnGroups(groups);
+      //  PickaxeSpawner.Instance.SpawnGroups(groups);
 
         foreach (var r in results)
         {
@@ -88,16 +89,30 @@ public class SlotResultManager : MonoBehaviour
 
         GameObject obj = Instantiate(
             PickaxeSpawner.Instance.pickaxePrefab,
-            slotPoint.position,
-            Quaternion.identity,
             PickaxeSpawner.Instance.spawnParent
         );
 
         RectTransform rect = obj.GetComponent<RectTransform>();
-        rect.sizeDelta = slotPoint.sizeDelta;
 
-        obj.GetComponent<PickaxeController>().Init(result.symbol);
+        result.sourceSlot.ClearVisual();
+
+
+        // позиция слота → локальная позиция в spawnParent
+        Vector2 localPos;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            PickaxeSpawner.Instance.spawnParent,
+            RectTransformUtility.WorldToScreenPoint(null, slotPoint.position),
+            null,
+            out localPos
+        );
+
+        rect.anchoredPosition = localPos;
+        rect.sizeDelta = new Vector2(120, 120); // хардкод — ок
+
+        obj.GetComponent<PickaxeController>()
+    .Init(result.symbol, result.amount);
     }
+
 
 
     public List<PickaxeGroup> GetPickaxeGroupsSorted()

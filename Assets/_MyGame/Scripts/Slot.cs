@@ -108,6 +108,19 @@ public class Slot : MonoBehaviour
             });
     }
 
+    public void ClearVisual()
+    {
+        foreach (Transform child in reel)
+        {
+            SlotItem item = child.GetComponent<SlotItem>();
+            if (item != null)
+            {
+                item.image.enabled = false;
+                item.amountText.text = "";
+            }
+        }
+    }
+
 
     SlotItem GetResultItem()
     {
