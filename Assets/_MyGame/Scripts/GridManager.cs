@@ -34,6 +34,8 @@ public class GridManager : MonoBehaviour
 
     IEnumerator RollByColumns()
     {
+        SlotResultManager.Instance.StartCollect(5 * 3);
+
         foreach (var column in columns)
         {
             foreach (var slot in column.slots)
@@ -44,4 +46,5 @@ public class GridManager : MonoBehaviour
             yield return new WaitForSeconds(columnDelay);
         }
     }
+
 }

@@ -103,9 +103,7 @@ public class Slot : MonoBehaviour
 
                 if (result != null && result.CurrentSymbol != null)
                 {
-                    Debug.Log(
-                        $"[SLOT RESULT] {result.CurrentSymbol.id}"
-                    );
+                    SlotResultManager.Instance.AddResult(result.CurrentSymbol, result.Amount, this);
                 }
             });
     }
@@ -130,5 +128,10 @@ public class Slot : MonoBehaviour
         }
 
         return closest;
+    }
+
+    public RectTransform GetSpawnPoint()
+    {
+        return viewport;
     }
 }
