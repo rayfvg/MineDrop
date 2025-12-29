@@ -6,6 +6,8 @@ public class SymbolConfig
     public string id;          // "Pickaxe1", "Empty", "Book", "Eye", "Dynamite"
     public Sprite sprite;
 
+    public int tier;
+
     public int damage;   // сила удара кирки
 
 

@@ -52,34 +52,20 @@ public class SlotResultManager : MonoBehaviour
         }
 
 
-        var groups = GetPickaxeGroupsSorted();
 
-        Debug.Log("КИРКИ ПО ВОЗРАСТАНИЮ:");
+        //  PickaxeSpawner.Instance.SpawnGroups(groups);
 
-        foreach (var g in groups)
-        {
-            Debug.Log($"{g.pickaxe.id} x{g.count} | dmg {g.Damage}");
-        }
+        //foreach (var r in results)
+        //{
+        //    if (!r.IsPickaxe)
+        //        continue;
+
+        //    SpawnPickaxeFromSlot(r);
+        //}
 
 
-        ApplyBookUpgrade(groups);
+        PickaxeFallManager.Instance.StartFall(results);
 
-        Debug.Log("КИРКИ ПОСЛЕ КНИГИ:");
-
-        foreach (var g in groups)
-        {
-            Debug.Log($"{g.pickaxe.id} x{g.count} | dmg {g.Damage}");
-        }
-
-      //  PickaxeSpawner.Instance.SpawnGroups(groups);
-
-        foreach (var r in results)
-        {
-            if (!r.IsPickaxe)
-                continue;
-
-            SpawnPickaxeFromSlot(r);
-        }
         // ❗ позже отсюда пойдёт логика кирок
     }
 

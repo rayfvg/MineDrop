@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,15 @@ public class BlockRow : MonoBehaviour
             );
 
             RectTransform blockRect = blockObj.GetComponent<RectTransform>();
+
+            blockRect.localScale = Vector3.zero;
+
+            blockRect
+                .DOScale(1f, 0.4f)
+                .SetEase(Ease.OutBack)
+                .SetDelay(Random.Range(0f, 0.25f));
+
+
             blockRect.anchorMin = Vector2.zero;
             blockRect.anchorMax = Vector2.one;
             blockRect.offsetMin = Vector2.zero;
@@ -36,7 +46,9 @@ public class BlockRow : MonoBehaviour
         {
             for (int i = point.childCount - 1; i >= 0; i--)
             {
-                Destroy(point.GetChild(i).gameObject);
+                var child = point.GetChild(i);
+                child.DOKill(true);
+                Destroy(child.gameObject);
             }
         }
     }

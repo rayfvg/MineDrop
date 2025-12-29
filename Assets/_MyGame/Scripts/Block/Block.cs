@@ -1,3 +1,4 @@
+п»їusing DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +9,13 @@ public class Block : MonoBehaviour
     public int reward;
 
     [Header("Damage Visuals")]
-    public Image[] damageStages; // сюда нужно перетащить все 5 Image
+    public Image[] damageStages; // СЃСЋРґР° РЅСѓР¶РЅРѕ РїРµСЂРµС‚Р°С‰РёС‚СЊ РІСЃРµ 5 Image
+
+    void OnDestroy()
+    {
+        if (transform != null)
+            transform.DOKill();
+    }
 
     public void Init(int hp, int rewardValue)
     {
@@ -22,6 +29,8 @@ public class Block : MonoBehaviour
     public void TakeHit(int damage)
     {
         currentHP -= damage;
+
+        PlayHitAnimation();
         UpdateVisual();
 
         if (currentHP <= 0)
@@ -30,21 +39,48 @@ public class Block : MonoBehaviour
         }
     }
 
+    void PlayHitAnimation()
+    {
+        transform.DOKill(true);
+
+        Sequence seq = DOTween.Sequence();
+        seq.SetTarget(transform);
+
+        seq.Append(transform.DOScale(0.88f, 0.05f));
+        seq.Append(transform.DOScale(1f, 0.12f).SetEase(Ease.OutBack));
+
+        transform.DOShakePosition(0.15f, 8f, 25, 70);
+    }
+
+
+
+
     void UpdateVisual()
     {
-        // сколько уже нанесено урона
+        // СЃРєРѕР»СЊРєРѕ СѓР¶Рµ РЅР°РЅРµСЃРµРЅРѕ СѓСЂРѕРЅР°
         int damageDone = maxHP - currentHP;
 
         for (int i = 0; i < damageStages.Length; i++)
         {
-            // включаем картинки по количеству урона
+            // РІРєР»СЋС‡Р°РµРј РєР°СЂС‚РёРЅРєРё РїРѕ РєРѕР»РёС‡РµСЃС‚РІСѓ СѓСЂРѕРЅР°
             damageStages[i].enabled = (i < damageDone);
         }
     }
 
     void DestroyBlock()
     {
-        Debug.Log($"Блок разрушен. Награда: {reward}");
-        Destroy(gameObject);
+        transform.DOKill(true); // в†ђ Р’РђР–РќРћ: true = complete
+
+        Sequence seq = DOTween.Sequence();
+        seq.SetTarget(transform); // в†ђ СЃРІСЏР·С‹РІР°РµРј sequence СЃ РѕР±СЉРµРєС‚РѕРј
+
+        seq.Append(transform.DOScale(1.2f, 0.12f));
+        seq.Append(transform.DOScale(0f, 0.2f));
+
+        seq.OnComplete(() =>
+        {
+            Destroy(gameObject);
+        });
     }
+
 }
