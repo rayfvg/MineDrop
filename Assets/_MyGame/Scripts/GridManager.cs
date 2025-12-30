@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class GridManager : MonoBehaviour
@@ -13,20 +13,36 @@ public class GridManager : MonoBehaviour
     public float columnDelay = 0.3f;
     public float rollTime = 1.5f;
 
+    bool isRolling;
+
     void Start()
     {
-        foreach (var column in columns)
+        for (int x = 0; x < columns.Length; x++)
         {
-            foreach (var slot in column.slots)
+            var column = columns[x];
+
+            for (int y = 0; y < column.slots.Length; y++)
             {
+                Slot slot = column.slots[y];
+
+                // 1️⃣ инициализация слота
                 slot.Init(pickaxes);
+
+                // 2️⃣ задаём позицию в сетке
+                Vector2Int gridPos = new Vector2Int(x, y);
+                slot.GridPosition = gridPos;
+
+                // 3️⃣ регистрируем слот
+                SlotGridManager.Instance.RegisterSlot(slot, gridPos);
             }
         }
     }
 
+
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !isRolling)
         {
             StartCoroutine(RollByColumns());
         }
@@ -34,6 +50,8 @@ public class GridManager : MonoBehaviour
 
     IEnumerator RollByColumns()
     {
+        isRolling = true;
+
         SlotResultManager.Instance.StartCollect(5 * 3);
 
         foreach (var column in columns)
@@ -45,6 +63,12 @@ public class GridManager : MonoBehaviour
 
             yield return new WaitForSeconds(columnDelay);
         }
+
+        yield return new WaitUntil(() =>
+            SlotResultManager.Instance.IsRunFinished
+        );
+
+        isRolling = false;
     }
 
 }

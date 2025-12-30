@@ -1,8 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 using System.Collections.Generic;
+using System.Collections;
 
 public class Slot : MonoBehaviour
 {
@@ -22,12 +23,72 @@ public class Slot : MonoBehaviour
     private float currentSpeed;
     private bool isRolling;
 
+    [Header("Result")]
+    public SymbolConfig currentSymbol;
+    public Image icon;
+
+    public Vector2Int GridPosition;
+
     public void Init(SymbolConfig[] configs)
     {
         pickaxes = configs;
 
         CreateItems();
     }
+
+    public bool HasPickaxe()
+    {
+        return currentSymbol != null && currentSymbol.hasAmount;
+    }
+
+    public IEnumerator PlayUpgradeVisual(SymbolConfig newSymbol)
+    {
+        if (this == null) yield break;
+        if (icon == null) yield break;
+        if (newSymbol == null) yield break;
+
+        icon.transform.DOKill();
+
+        // вспышка
+        icon.transform
+            .DOScale(1.35f, 0.12f)
+            .SetEase(Ease.OutBack);
+
+        yield return new WaitForSeconds(0.12f);
+
+        // смена кирки
+        currentSymbol = newSymbol;
+        icon.sprite = newSymbol.sprite;
+
+        icon.transform
+            .DOScale(1f, 0.15f)
+            .SetEase(Ease.OutBack);
+    }
+
+
+
+    public List<Slot> GetCrossNeighbours()
+    {
+        List<Slot> result = new();
+
+        TryAddNeighbour(GridPosition + Vector2Int.up, result);
+        TryAddNeighbour(GridPosition + Vector2Int.down, result);
+        TryAddNeighbour(GridPosition + Vector2Int.left, result);
+        TryAddNeighbour(GridPosition + Vector2Int.right, result);
+        Debug.Log($"{name} neighbours: {result.Count}");
+        return result;
+
+       
+    }
+
+    void TryAddNeighbour(Vector2Int pos, List<Slot> list)
+    {
+        if (SlotGridManager.Instance.TryGetSlot(pos, out Slot slot))
+        {
+            list.Add(slot);
+        }
+    }
+
 
     void CreateItems()
     {
@@ -97,28 +158,46 @@ public class Slot : MonoBehaviour
 
         reel.DOAnchorPosY(snapY, 0.25f)
             .SetEase(Ease.OutBack)
-            .OnComplete(() =>
-            {
-                SlotItem result = GetResultItem();
+           .OnComplete(() =>
+           {
+               if (this == null) return;
 
-                if (result != null && result.CurrentSymbol != null)
-                {
-                    SlotResultManager.Instance.AddResult(result.CurrentSymbol, result.Amount, this);
-                }
-            });
+               SlotItem result = GetResultItem();
+               if (result == null || result.CurrentSymbol == null)
+                   return;
+
+               currentSymbol = result.CurrentSymbol;
+
+               if (icon != null)
+               {
+                   icon.sprite = currentSymbol.sprite;
+                   icon.enabled = true;
+               }
+
+               if (SlotResultManager.Instance != null)
+               {
+                   SlotResultManager.Instance.AddResult(
+                       result.CurrentSymbol,
+                       result.Amount,
+                       this
+                   );
+               }
+           });
     }
 
     public void ClearVisual()
     {
+        // очищаем ТОЛЬКО reel (прокрутку)
         foreach (Transform child in reel)
         {
             SlotItem item = child.GetComponent<SlotItem>();
-            if (item != null)
-            {
-                item.image.enabled = false;
-                item.amountText.text = "";
-            }
+            if (item == null) continue;
+
+            item.image.enabled = false;
+            item.amountText.text = "";
         }
+
+        // ❗ icon НЕ ТРОГАЕМ
     }
 
 

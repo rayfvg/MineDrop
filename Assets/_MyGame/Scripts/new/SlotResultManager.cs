@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SlotResultManager : MonoBehaviour
@@ -9,22 +10,47 @@ public class SlotResultManager : MonoBehaviour
 
     private int expectedResults;
     private int receivedResults;
+    bool pipelineStarted;
+    RunPhase currentPhase;
+
+    public GridManager gridManager;
 
 
+    public bool IsRunFinished { get; private set; }
     void Awake()
     {
         Instance = this;
     }
 
+    List<SymbolConfig> GetAllPickaxeConfigs()
+    {
+        if (gridManager == null)
+        {
+            Debug.LogError("❌ GridManager НЕ назначен в SlotResultManager");
+            return new List<SymbolConfig>();
+        }
+
+        List<SymbolConfig> list = new(gridManager.pickaxes);
+        list.Sort((a, b) => a.damage.CompareTo(b.damage));
+        return list;
+    }
+
+
     public void StartCollect(int totalSlots)
     {
+        pipelineStarted = false;
         results.Clear();
         expectedResults = totalSlots;
         receivedResults = 0;
+
+        IsRunFinished = false; // 👈 важно
     }
 
     public void AddResult(SymbolConfig symbol, int amount, Slot sourceSlot)
     {
+        if (pipelineStarted)
+            return;
+
         results.Add(new SlotResult
         {
             symbol = symbol,
@@ -36,38 +62,117 @@ public class SlotResultManager : MonoBehaviour
 
         if (receivedResults >= expectedResults)
         {
+            
             OnAllResultsCollected();
         }
     }
 
 
 
+
     void OnAllResultsCollected()
     {
-        Debug.Log("ВСЕ СЛОТЫ ОСТАНОВИЛИСЬ");
+        if (pipelineStarted)
+            return;
 
-        foreach (var r in results)
+        pipelineStarted = true;
+
+        Debug.Log("🎰 ВСЕ СЛОТЫ ОСТАНОВИЛИСЬ");
+        StartCoroutine(RunPipeline());
+    }
+
+    IEnumerator RunPipeline()
+    {
+        // 📘 ЭТАП КНИГИ
+        currentPhase = RunPhase.Book;
+
+        if (HasBook())
         {
-            Debug.Log($"{r.symbol.id} x {r.amount}");
+            Debug.Log("📘 ЭТАП КНИГИ: улучшение кирок");
+            yield return StartCoroutine(BookPhase());
+        }
+        else
+        {
+            Debug.Log("📘 ЭТАП КНИГИ: пропущен");
         }
 
+        // ⛏ ЭТАП КИРОК
+        currentPhase = RunPhase.PickaxeFall;
+        Debug.Log("⛏ ЭТАП КИРОК: падение");
 
+        yield return StartCoroutine(
+     PickaxeFallManager.Instance.StartFall(results)
+ );
 
-        //  PickaxeSpawner.Instance.SpawnGroups(groups);
+        // 💣 ДИНАМИТ (позже)
+        if (HasDynamite())
+            Debug.Log("💣 ЭТАП ДИНАМИТА");
 
-        //foreach (var r in results)
-        //{
-        //    if (!r.IsPickaxe)
-        //        continue;
+        // 👁 ГЛАЗ (позже)
+        if (HasEye())
+            Debug.Log("👁 ЭТАП ГЛАЗА");
 
-        //    SpawnPickaxeFromSlot(r);
-        //}
+        currentPhase = RunPhase.End;
+        Debug.Log("🏁 РАН ЗАВЕРШЁН");
 
-
-        PickaxeFallManager.Instance.StartFall(results);
-
-        // ❗ позже отсюда пойдёт логика кирок
+        IsRunFinished = true; // 👈 вот он
     }
+
+    IEnumerator BookPhase()
+    {
+        foreach (var r in results)
+        {
+            if (!r.IsBook)
+                continue;
+
+            Slot bookSlot = r.sourceSlot;
+            List<Slot> targets = bookSlot.GetCrossNeighbours();
+
+            foreach (var slot in targets)
+            {
+                if (slot == null)
+                    continue;
+
+
+                SlotResult targetResult =
+                    results.Find(x => x.sourceSlot == slot);
+
+                if (targetResult == null)
+                    continue;
+
+                if (!targetResult.IsPickaxe)
+                    continue;
+
+                // ⬆️ НАХОДИМ АПГРЕЙД
+                SymbolConfig upgraded = GetNextPickaxe(
+                    targetResult.symbol,
+                    GetAllPickaxeConfigs()
+                );
+
+                if (upgraded == targetResult.symbol)
+                    continue;
+
+                // 🔥 ОБНОВЛЯЕМ ДАННЫЕ
+                targetResult.symbol = upgraded;
+                slot.currentSymbol = upgraded;
+
+                Debug.Log($"📘 Апгрейд: {targetResult.symbol.id} → {upgraded.id}");
+
+                // 🎬 ВИЗУАЛ
+                yield return StartCoroutine(
+                    slot.PlayUpgradeVisual(upgraded)
+
+
+                );
+            }
+        }
+
+        yield return new WaitForSeconds(0.2f);
+    }
+
+
+
+
 
     void SpawnPickaxeFromSlot(SlotResult result)
     {
@@ -177,5 +282,25 @@ public class SlotResultManager : MonoBehaviour
             return current;
 
         return all[index + 1];
+    }
+
+    public bool HasDynamite()
+    {
+        foreach (var r in results)
+        {
+            if (r.symbol.id == "Dynamite")
+                return true;
+        }
+        return false;
+    }
+
+    public bool HasEye()
+    {
+        foreach (var r in results)
+        {
+            if (r.symbol.id == "Eye")
+                return true;
+        }
+        return false;
     }
 }

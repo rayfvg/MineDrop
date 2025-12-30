@@ -72,7 +72,15 @@ public class PickaxeController : MonoBehaviour
 
 
 
+    void Start()
+    {
+        Invoke(nameof(ForceFinish), 3f);
+    }
 
+    void ForceFinish()
+    {
+        Finish();
+    }
 
     void OnDestroy()
     {

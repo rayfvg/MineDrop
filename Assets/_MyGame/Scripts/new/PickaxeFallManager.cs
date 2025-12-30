@@ -9,14 +9,18 @@ public class PickaxeFallManager : MonoBehaviour
     public RectTransform spawnParent;
     public GameObject pickaxePrefab;
 
+    public bool IsFinished { get; private set; }
+
     void Awake()
     {
         Instance = this;
     }
 
-    public void StartFall(List<SlotResult> results)
+    public IEnumerator StartFall(List<SlotResult> results)
     {
-        StartCoroutine(FallRoutine(results));
+        IsFinished = false;
+        yield return StartCoroutine(FallRoutine(results));
+        IsFinished = true;
     }
 
     IEnumerator FallRoutine(List<SlotResult> results)
@@ -51,7 +55,6 @@ public class PickaxeFallManager : MonoBehaviour
             // ⬇ ПАДАЕТ ЦЕЛАЯ ГРУППА
             yield return StartCoroutine(FallTierGroup(sameTier));
         }
-
         Debug.Log("✅ ВСЕ КИРКИ ОТРАБОТАЛИ");
     }
 
@@ -74,10 +77,14 @@ public class PickaxeFallManager : MonoBehaviour
 
             active.Add(pc);
             pc.OnFinished += p => active.Remove(p);
+
         }
 
         // ждём, пока вся группа исчезнет
-        yield return new WaitUntil(() => active.Count == 0);
+        float timeout = Time.time + 4f;
+        yield return new WaitUntil(() =>
+            active.Count == 0 || Time.time > timeout
+        );
     }
 
 
