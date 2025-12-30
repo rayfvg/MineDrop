@@ -81,6 +81,17 @@ public class Slot : MonoBehaviour
        
     }
 
+    public void PlayBookVisual()
+    {
+        if (icon == null)
+        {
+            Debug.LogError($"❌ Slot {name}: icon не найден (книга)");
+            return;
+        }
+
+        icon.transform.DOPunchScale(Vector3.one * 0.35f, 0.4f).SetEase(Ease.OutBack);
+    }
+
     void TryAddNeighbour(Vector2Int pos, List<Slot> list)
     {
         if (SlotGridManager.Instance.TryGetSlot(pos, out Slot slot))
@@ -163,19 +174,14 @@ public class Slot : MonoBehaviour
                if (this == null) return;
 
                SlotItem result = GetResultItem();
-               if (result == null || result.CurrentSymbol == null)
-                   return;
 
-               currentSymbol = result.CurrentSymbol;
-
-               if (icon != null)
+               if (result != null && result.CurrentSymbol != null)
                {
-                   icon.sprite = currentSymbol.sprite;
-                   icon.enabled = true;
-               }
+                   currentSymbol = result.CurrentSymbol;
 
-               if (SlotResultManager.Instance != null)
-               {
+                   // 🔥 ВАЖНО: сохраняем иконку ПОБЕДИВШЕГО SlotItem
+                   icon = result.image;
+
                    SlotResultManager.Instance.AddResult(
                        result.CurrentSymbol,
                        result.Amount,

@@ -120,30 +120,28 @@ public class SlotResultManager : MonoBehaviour
 
     IEnumerator BookPhase()
     {
+        List<(Slot slot, SymbolConfig upgraded)> upgrades = new();
+
+        // 1️⃣ СОБИРАЕМ ВСЕ АПГРЕЙДЫ
         foreach (var r in results)
         {
             if (!r.IsBook)
                 continue;
 
+
             Slot bookSlot = r.sourceSlot;
             List<Slot> targets = bookSlot.GetCrossNeighbours();
 
+            r.sourceSlot.PlayBookVisual();
+
             foreach (var slot in targets)
             {
-                if (slot == null)
-                    continue;
-
-
                 SlotResult targetResult =
                     results.Find(x => x.sourceSlot == slot);
 
-                if (targetResult == null)
+                if (targetResult == null || !targetResult.IsPickaxe)
                     continue;
 
-                if (!targetResult.IsPickaxe)
-                    continue;
-
-                // ⬆️ НАХОДИМ АПГРЕЙД
                 SymbolConfig upgraded = GetNextPickaxe(
                     targetResult.symbol,
                     GetAllPickaxeConfigs()
@@ -152,23 +150,32 @@ public class SlotResultManager : MonoBehaviour
                 if (upgraded == targetResult.symbol)
                     continue;
 
-                // 🔥 ОБНОВЛЯЕМ ДАННЫЕ
+                // 🔥 обновляем ДАННЫЕ СРАЗУ
                 targetResult.symbol = upgraded;
                 slot.currentSymbol = upgraded;
 
-                Debug.Log($"📘 Апгрейд: {targetResult.symbol.id} → {upgraded.id}");
 
-                // 🎬 ВИЗУАЛ
-                yield return StartCoroutine(
-                    slot.PlayUpgradeVisual(upgraded)
-
-
-                );
+               
+                upgrades.Add((slot, upgraded));
             }
         }
 
-        yield return new WaitForSeconds(0.2f);
+        if (upgrades.Count == 0)
+            yield break;
+
+        // ⏸ ПАУЗА — игрок понял, что книга сработала
+        yield return new WaitForSeconds(0.25f);
+
+        // 2️⃣ ВИЗУАЛЬНЫЙ ПОКАЗ (ВСЕ ОДНОВРЕМЕННО)
+        foreach (var u in upgrades)
+        {
+            StartCoroutine(u.slot.PlayUpgradeVisual(u.upgraded));
+        }
+
+        // ⏸ ждём, пока игрок УВИДИТ апгрейд
+        yield return new WaitForSeconds(0.5f);
     }
+
 
 
 
