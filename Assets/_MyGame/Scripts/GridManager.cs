@@ -14,6 +14,7 @@ public class GridManager : MonoBehaviour
     public float rollTime = 1.5f;
 
     bool isRolling;
+    int freeSpins;
 
     void Start()
     {
@@ -42,10 +43,18 @@ public class GridManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !isRolling)
+        if (Input.GetKeyDown(KeyCode.Space) && !isRolling && freeSpins == 0)
         {
             StartCoroutine(RollByColumns());
         }
+    }
+
+    public void AddFreeSpins(int count)
+    {
+        freeSpins += count;
+
+        if (!isRolling)
+            StartCoroutine(RollByColumns());
     }
 
     IEnumerator RollByColumns()
@@ -57,9 +66,7 @@ public class GridManager : MonoBehaviour
         foreach (var column in columns)
         {
             foreach (var slot in column.slots)
-            {
                 slot.StartRoll(rollTime);
-            }
 
             yield return new WaitForSeconds(columnDelay);
         }
@@ -69,6 +76,14 @@ public class GridManager : MonoBehaviour
         );
 
         isRolling = false;
+
+        // 👁 автофриспины
+        if (freeSpins > 0)
+        {
+            freeSpins--;
+            yield return new WaitForSeconds(0.25f);
+            StartCoroutine(RollByColumns());
+        }
     }
 
 }

@@ -106,17 +106,66 @@ public class SlotResultManager : MonoBehaviour
 
         // 💣 ДИНАМИТ (позже)
         if (HasDynamite())
+        {
+            currentPhase = RunPhase.Dynamite;
             Debug.Log("💣 ЭТАП ДИНАМИТА");
+
+            yield return StartCoroutine(
+                DynamiteFallManager.Instance.StartFall(results)
+            );
+        }
+
 
         // 👁 ГЛАЗ (позже)
         if (HasEye())
-            Debug.Log("👁 ЭТАП ГЛАЗА");
+        {
+            int eyes = GetEyeCount();
+            if (eyes > 0)
+            {
+                currentPhase = RunPhase.Eye;
+                Debug.Log($"👁 ЭТАП ГЛАЗА: {eyes} фриспинов");
+
+                // 👁 АНИМИРУЕМ ВСЕ ГЛАЗА В СЛОТАХ
+                foreach (var r in results)
+                {
+                    if (r.IsEye && r.sourceSlot != null)
+                    {
+                        r.sourceSlot.PlayEyeVisual();
+                    }
+                }
+
+                // ⏸ небольшая пауза, чтобы игрок увидел глаз
+                yield return new WaitForSeconds(0.4f);
+
+                // 👁 ЦЕНТРАЛЬНАЯ АНИМАЦИЯ + ТЕКСТ
+                yield return StartCoroutine(
+                    EyePhaseManager.Instance.Play(eyes)
+                );
+
+                // 🔁 ДОБАВЛЯЕМ ФРИСПИНЫ
+                gridManager.AddFreeSpins(eyes);
+            }
+        }
+
+
 
         currentPhase = RunPhase.End;
         Debug.Log("🏁 РАН ЗАВЕРШЁН");
 
         IsRunFinished = true; // 👈 вот он
     }
+
+    int GetEyeCount()
+    {
+        int count = 0;
+        foreach (var r in results)
+        {
+            if (r.symbol != null && r.symbol.id == "Eye")
+                count += 1; // 👈 ОДИН ГЛАЗ = ОДИН ФРИСПИН
+        }
+        return count;
+    }
+
 
     IEnumerator BookPhase()
     {

@@ -11,6 +11,8 @@ public class Block : MonoBehaviour
     [Header("Damage Visuals")]
     public Image[] damageStages; // сюда нужно перетащить все 5 Image
 
+    bool isDestroyed;
+
     void OnDestroy()
     {
         if (transform != null)
@@ -28,16 +30,22 @@ public class Block : MonoBehaviour
 
     public void TakeHit(int damage)
     {
+        if (isDestroyed) return;
+
         currentHP -= damage;
 
-        PlayHitAnimation();
-        UpdateVisual();
-
-        if (currentHP <= 0)
+        if (currentHP > 0)
         {
+            PlayHitAnimation();
+            UpdateVisual();
+        }
+        else
+        {
+            isDestroyed = true;
             DestroyBlock();
         }
     }
+
 
     void PlayHitAnimation()
     {
@@ -69,17 +77,20 @@ public class Block : MonoBehaviour
 
     void DestroyBlock()
     {
-        transform.DOKill(true); // ← ВАЖНО: true = complete
+        if (this == null) return;
+
+        transform.DOKill(true);
 
         Sequence seq = DOTween.Sequence();
-        seq.SetTarget(transform); // ← связываем sequence с объектом
+        seq.SetTarget(transform);
 
         seq.Append(transform.DOScale(1.2f, 0.12f));
         seq.Append(transform.DOScale(0f, 0.2f));
 
         seq.OnComplete(() =>
         {
-            Destroy(gameObject);
+            if (this != null)
+                Destroy(gameObject);
         });
     }
 

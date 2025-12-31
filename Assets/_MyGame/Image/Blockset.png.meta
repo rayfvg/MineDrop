@@ -316,6 +316,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Blockset_8
+      rect:
+        serializedVersion: 2
+        x: 791
+        y: 431
+        width: 358
+        height: 652
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e48e901dd9a6df14d9e59a604f3c366d
+      internalID: -998885826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -335,6 +356,7 @@ TextureImporter:
       Blockset_5: 759243668
       Blockset_6: -168417751
       Blockset_7: -1934652265
+      Blockset_8: -998885826
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -22,14 +22,34 @@ public class PickaxeController : MonoBehaviour
         hitsLeft = hits;
 
         GetComponent<UnityEngine.UI.Image>().sprite = symbol.sprite;
+
+        StartCoroutine(FailsafeTimeout());
     }
+
+    IEnumerator FailsafeTimeout()
+    {
+        float timeout = 6f; // с запасом
+        float timer = 0f;
+
+        while (hitsLeft > 0 && timer < timeout)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        Finish();
+    }
+
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (hasHitThisFall) return;
         if (!collision.collider.CompareTag("Block")) return;
 
+
         Block block = collision.collider.GetComponent<Block>();
-        if (block == null) return;
+        if (block == null || block.currentHP <= 0)
+            return;
 
         hasHitThisFall = true;
 
@@ -47,18 +67,14 @@ public class PickaxeController : MonoBehaviour
 
     IEnumerator HandleHit(Block block)
     {
-        PlayHitAnimation();
-
-        yield return new WaitForSeconds(0.06f);
-
         if (block == null)
-        {
-            Finish();
             yield break;
-        }
 
+        // 🔥 НАНОСИМ УРОН СРАЗУ
         block.TakeHit(damage);
         hitsLeft--;
+
+        PlayHitAnimation();
 
         if (hitsLeft <= 0)
         {
@@ -66,21 +82,10 @@ public class PickaxeController : MonoBehaviour
         }
         else
         {
-            StartCoroutine(Bounce());
+            yield return StartCoroutine(Bounce());
         }
     }
 
-
-
-    void Start()
-    {
-        Invoke(nameof(ForceFinish), 3f);
-    }
-
-    void ForceFinish()
-    {
-        Finish();
-    }
 
     void OnDestroy()
     {

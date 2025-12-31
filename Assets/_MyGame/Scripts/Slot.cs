@@ -191,6 +191,42 @@ public class Slot : MonoBehaviour
            });
     }
 
+    public void PlayEyeVisual()
+    {
+        if (icon == null) return;
+
+        icon.transform.DOKill();
+
+        Sequence seq = DOTween.Sequence();
+
+        seq.Append(
+            icon.transform
+                .DOScale(1.35f, 0.2f)
+                .SetEase(Ease.OutBack)
+        );
+
+        seq.Append(
+            icon.transform
+                .DORotate(new Vector3(0, 0, 15f), 0.1f)
+        );
+
+        seq.Append(
+            icon.transform
+                .DORotate(new Vector3(0, 0, -15f), 0.1f)
+        );
+
+        seq.Append(
+            icon.transform
+                .DORotate(Vector3.zero, 0.1f)
+        );
+
+        seq.Append(
+            icon.transform
+                .DOScale(1f, 0.2f)
+                .SetEase(Ease.InOutBack)
+        );
+    }
+
     public void ClearVisual()
     {
         // очищаем ТОЛЬКО reel (прокрутку)
