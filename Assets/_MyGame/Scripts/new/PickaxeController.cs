@@ -106,6 +106,20 @@ public class PickaxeController : MonoBehaviour
         hasHitThisFall = false;
     }
 
+    public void ForceFinish()
+    {
+        if (finished) return;
+        Finish();
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("KillZone"))
+        {
+            ForceFinish();
+        }
+    }
+
     public void PlayHitAnimation()
     {
         transform.DOKill(true);

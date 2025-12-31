@@ -77,21 +77,19 @@ public class Block : MonoBehaviour
 
     void DestroyBlock()
     {
-        if (this == null) return;
-
         transform.DOKill(true);
 
-        Sequence seq = DOTween.Sequence();
-        seq.SetTarget(transform);
+        // 💰 НАГРАДА
+        ScoreManager.Instance.AddScore(reward);
+        FloatingTextSpawner.Instance.Spawn(
+    reward,
+    transform.position
+);
 
+        Sequence seq = DOTween.Sequence();
         seq.Append(transform.DOScale(1.2f, 0.12f));
         seq.Append(transform.DOScale(0f, 0.2f));
-
-        seq.OnComplete(() =>
-        {
-            if (this != null)
-                Destroy(gameObject);
-        });
+        seq.OnComplete(() => Destroy(gameObject));
     }
 
 }
