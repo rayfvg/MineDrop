@@ -18,8 +18,8 @@ public class PickaxeController : MonoBehaviour
     public void Init(SymbolConfig symbol, int hits)
     {
         config = symbol;
-        damage = symbol.damage;
-        hitsLeft = hits;
+        damage = symbol.damage + GameModifiers.Instance.bonusDamage;
+        hitsLeft = hits + GameModifiers.Instance.extraHits;
 
         GetComponent<UnityEngine.UI.Image>().sprite = symbol.sprite;
 

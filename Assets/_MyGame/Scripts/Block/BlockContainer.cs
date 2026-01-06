@@ -5,10 +5,6 @@ public class BlockContainer : MonoBehaviour
 {
     public List<BlockRow> rows;
 
-    void Start()
-    {
-        FillAll();
-    }
 
     public void FillAll()
     {

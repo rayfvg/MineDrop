@@ -1,4 +1,4 @@
-using DG.Tweening;
+﻿using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,6 +37,9 @@ public class BlockRow : MonoBehaviour
 
             Block block = blockObj.GetComponent<Block>();
             block.Init(selected.hp, selected.reward);
+
+            // ✅ РЕГИСТРАЦИЯ
+            BlockRefreshManager.Instance.Register(block);
         }
     }
 

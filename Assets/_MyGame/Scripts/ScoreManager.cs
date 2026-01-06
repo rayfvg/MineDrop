@@ -20,7 +20,11 @@ public class ScoreManager : MonoBehaviour
 
     public void AddScore(int baseAmount)
     {
-        int finalAmount = baseAmount * Multiplier;
+        int finalAmount =
+    Mathf.RoundToInt(baseAmount *
+    Multiplier *
+    GameModifiers.Instance.scoreMultiplier);
+
         Score += finalAmount;
         UpdateUI();
     }
@@ -38,5 +42,12 @@ public class ScoreManager : MonoBehaviour
 
         if (multiplierText != null)
             multiplierText.text = "x" + Multiplier;
+    }
+
+    public void ResetScore()
+    {
+        Score = 0;
+        Multiplier = 1;
+        UpdateUI();
     }
 }

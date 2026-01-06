@@ -26,6 +26,8 @@ public class Block : MonoBehaviour
         reward = rewardValue;
 
         UpdateVisual();
+
+        BlockRefreshManager.Instance.Register(this);
     }
 
     public void TakeHit(int damage)
@@ -79,17 +81,20 @@ public class Block : MonoBehaviour
     {
         transform.DOKill(true);
 
-        // 💰 НАГРАДА
         ScoreManager.Instance.AddScore(reward);
         FloatingTextSpawner.Instance.Spawn(
-    reward,
-    transform.position
-);
+            reward,
+            transform.position
+        );
 
         Sequence seq = DOTween.Sequence();
         seq.Append(transform.DOScale(1.2f, 0.12f));
         seq.Append(transform.DOScale(0f, 0.2f));
-        seq.OnComplete(() => Destroy(gameObject));
+        seq.OnComplete(() =>
+        {
+            BlockRefreshManager.Instance.Unregister(this);
+            Destroy(gameObject);
+        });
     }
 
 }

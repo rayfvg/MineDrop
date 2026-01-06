@@ -43,10 +43,16 @@ public class GridManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && !isRolling && freeSpins == 0)
+        if (
+     Input.GetKeyDown(KeyCode.Space) &&
+     GameStateManager.Instance.CanStartSpin() &&
+     !isRolling &&
+     freeSpins == 0
+ )
         {
             StartCoroutine(RollByColumns());
         }
+
     }
 
     public void AddFreeSpins(int count)
