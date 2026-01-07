@@ -34,6 +34,13 @@ public class ChestMultiplier : MonoBehaviour
         pickaxe.ForceFinish();
     }
 
+    public void ResetChest()
+    {
+        activated = false;
+        closedVisual.SetActive(true);
+        openedVisual.SetActive(false);
+    }
+
     int RollMultiplier()
     {
         float total = 0;

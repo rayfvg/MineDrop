@@ -3,6 +3,8 @@ using System.Collections;
 
 public class GridManager : MonoBehaviour
 {
+    public static GridManager Instance;
+
     [Header("Pickaxes")]
     public SymbolConfig[] pickaxes;
 
@@ -16,6 +18,13 @@ public class GridManager : MonoBehaviour
     bool isRolling;
     int freeSpins;
 
+    public int FreeSpins => freeSpins; // 👈 ВОТ ОН
+
+    void Awake()
+    {
+        Instance = this;
+    }
+
     void Start()
     {
         for (int x = 0; x < columns.Length; x++)
@@ -26,33 +35,27 @@ public class GridManager : MonoBehaviour
             {
                 Slot slot = column.slots[y];
 
-                // 1️⃣ инициализация слота
                 slot.Init(pickaxes);
-
-                // 2️⃣ задаём позицию в сетке
                 Vector2Int gridPos = new Vector2Int(x, y);
                 slot.GridPosition = gridPos;
 
-                // 3️⃣ регистрируем слот
                 SlotGridManager.Instance.RegisterSlot(slot, gridPos);
             }
         }
     }
 
-
+    public void ResetFreeSpins()
+    {
+        freeSpins = 0;
+    }
 
     void Update()
     {
-        if (
-     Input.GetKeyDown(KeyCode.Space) &&
-     GameStateManager.Instance.CanStartSpin() &&
-     !isRolling &&
-     freeSpins == 0
- )
+        if (Input.GetKeyDown(KeyCode.Space) && RunManager.Instance.CanSpin())
         {
+            RunManager.Instance.MarkSpinUsed();
             StartCoroutine(RollByColumns());
         }
-
     }
 
     public void AddFreeSpins(int count)
@@ -83,13 +86,12 @@ public class GridManager : MonoBehaviour
 
         isRolling = false;
 
-        // 👁 автофриспины
         if (freeSpins > 0)
         {
             freeSpins--;
             yield return new WaitForSeconds(0.25f);
             StartCoroutine(RollByColumns());
         }
+       
     }
-
 }

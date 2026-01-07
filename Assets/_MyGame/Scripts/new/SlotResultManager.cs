@@ -151,7 +151,7 @@ public class SlotResultManager : MonoBehaviour
 
         currentPhase = RunPhase.End;
         Debug.Log("🏁 РАН ЗАВЕРШЁН");
-
+        RunManager.Instance.TryFinishRun();
         IsRunFinished = true; // 👈 вот он
     }
 

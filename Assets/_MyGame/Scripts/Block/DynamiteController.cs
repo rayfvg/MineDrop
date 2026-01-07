@@ -20,14 +20,23 @@ public class DynamiteController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (hasLanded) return;
-        if (!collision.collider.CompareTag("Block")) return;
+        if (finished) return;
+
+        if (collision.collider.CompareTag("KillZone"))
+        {
+            Finish();
+            return;
+        }
+
+        if (!collision.collider.CompareTag("Block"))
+            return;
 
         hasLanded = true;
-        Block block = collision.collider.GetComponent<Block>();
 
+        Block block = collision.collider.GetComponent<Block>();
         StartCoroutine(ExplosionSequence(block));
     }
+
 
     IEnumerator ExplosionSequence(Block block)
     {

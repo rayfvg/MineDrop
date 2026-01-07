@@ -28,6 +28,12 @@ public class DebtManager : MonoBehaviour
         recordText.text = $"Рекорд: {PlayerPrefs.GetInt(RecordKey, 0)}";
     }
 
+    public void IncreaseDebt()
+    {
+        currentDebt = Mathf.RoundToInt(currentDebt * 1.5f);
+        PlayerPrefs.SetInt(DebtKey, currentDebt);
+        PlayerPrefs.Save();
+    }
     public void SaveRecord(int score)
     {
         int record = PlayerPrefs.GetInt(RecordKey, 0);

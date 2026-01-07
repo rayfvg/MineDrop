@@ -1,7 +1,14 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BuffApplier : MonoBehaviour
 {
+    public static BuffApplier Instance;
+
+    void Awake()
+    {
+        Instance = this;
+    }
+
     public void Apply(BuffData buff)
     {
         var m = GameModifiers.Instance;
@@ -33,6 +40,7 @@ public class BuffApplier : MonoBehaviour
                 break;
         }
 
-        GameStateManager.Instance.StartGame();
+        // ⬅ ВАЖНО: НЕ стартуем игру тут
+        GameStateManager.Instance.GoToMenu();
     }
 }

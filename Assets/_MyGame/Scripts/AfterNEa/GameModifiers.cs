@@ -15,9 +15,12 @@ public class GameModifiers : MonoBehaviour
     public float extraPickaxeChance = 0f;
     public float extraBookChance = 0f;
     public float extraEyeChance = 0f;
+    public float extraDynamiteChance = 0f;
 
     [Header("Special")]
     public int extraFreeSpins = 0;
+    
+
 
     void Awake()
     {
