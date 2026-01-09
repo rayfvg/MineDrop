@@ -25,7 +25,9 @@ public class Slot : MonoBehaviour
 
     [Header("Result")]
     public SymbolConfig currentSymbol;
+    public int currentAmount; // 👈 ВОТ ОНО
     public Image icon;
+    public TMP_Text amountText; // 👈 отдельный текст
 
     public Vector2Int GridPosition;
 
@@ -174,20 +176,26 @@ public class Slot : MonoBehaviour
                if (this == null) return;
 
                SlotItem result = GetResultItem();
+               if (result == null || result.CurrentSymbol == null)
+                   return;
 
-               if (result != null && result.CurrentSymbol != null)
+               currentSymbol = result.CurrentSymbol;
+               currentAmount = result.Amount;
+
+               icon = result.image;
+               icon.enabled = true;
+
+               if (amountText != null)
                {
-                   currentSymbol = result.CurrentSymbol;
-
-                   // 🔥 ВАЖНО: сохраняем иконку ПОБЕДИВШЕГО SlotItem
-                   icon = result.image;
-
-                   SlotResultManager.Instance.AddResult(
-                       result.CurrentSymbol,
-                       result.Amount,
-                       this
-                   );
+                   amountText.text = currentAmount > 1 ? currentAmount.ToString() : "";
                }
+
+               // 🔥 ВОЗВРАЩАЕМ КЛЮЧЕВОЙ ВЫЗОВ
+               SlotResultManager.Instance.AddResult(
+                   currentSymbol,
+                   currentAmount,
+                   this
+               );
            });
     }
 

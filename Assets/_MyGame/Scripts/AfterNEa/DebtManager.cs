@@ -5,6 +5,16 @@ public class DebtManager : MonoBehaviour
 {
     public static DebtManager Instance;
 
+    [Header("Debt Progression")]
+    public int startDebt = 100;
+
+    public AnimationCurve debtGrowthCurve;
+    // X = номер победы (0,1,2,3Е)
+    // Y = множитель
+
+    int winsCount;
+    const string WinsKey = "WINS";
+
     public int currentDebt;
 
     [Header("UI")]
@@ -18,7 +28,9 @@ public class DebtManager : MonoBehaviour
     {
         Instance = this;
 
-        currentDebt = PlayerPrefs.GetInt(DebtKey, 100);
+        winsCount = PlayerPrefs.GetInt(WinsKey, 0);
+        currentDebt = PlayerPrefs.GetInt(DebtKey, startDebt);
+
         UpdateUI();
     }
 
@@ -30,10 +42,16 @@ public class DebtManager : MonoBehaviour
 
     public void IncreaseDebt()
     {
-        currentDebt = Mathf.RoundToInt(currentDebt * 1.5f);
+        winsCount++;
+        PlayerPrefs.SetInt(WinsKey, winsCount);
+
+        float multiplier = debtGrowthCurve.Evaluate(winsCount);
+        currentDebt = Mathf.RoundToInt(startDebt * multiplier);
+
         PlayerPrefs.SetInt(DebtKey, currentDebt);
         PlayerPrefs.Save();
     }
+
     public void SaveRecord(int score)
     {
         int record = PlayerPrefs.GetInt(RecordKey, 0);

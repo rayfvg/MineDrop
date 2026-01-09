@@ -25,21 +25,19 @@ public class PickaxeSpawner : MonoBehaviour
     {
         foreach (var group in groups)
         {
-            for (int i = 0; i < group.count; i++)
-            {
-                SpawnPickaxe(group.pickaxe);
-                yield return new WaitForSeconds(spawnDelay);
-            }
+            SpawnPickaxe(group.pickaxe, group.count);
+            yield return new WaitForSeconds(spawnDelay);
 
             yield return new WaitForSeconds(groupDelay);
         }
     }
 
-    void SpawnPickaxe(SymbolConfig symbol)
+    void SpawnPickaxe(SymbolConfig symbol, int hits)
     {
         GameObject obj = Instantiate(pickaxePrefab, spawnParent);
         obj.transform.localPosition = Vector3.zero;
 
-        //obj.GetComponent<PickaxeController>().Init(symbol);
+        obj.GetComponent<PickaxeController>()
+            .Init(symbol, hits);
     }
 }

@@ -28,6 +28,8 @@ public class GameStateManager : MonoBehaviour
         victoryCanvas.SetActive(false);
 
         GameModifiers.Instance.ResetAll();
+
+        DebtManager.Instance.UpdateUI();
     }
 
     public void StartGame()

@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
+using static Unity.Collections.AllocatorManager;
 
 public class Block : MonoBehaviour
 {
@@ -49,17 +50,22 @@ public class Block : MonoBehaviour
     }
 
 
-    void PlayHitAnimation()
+    public void PlayHitAnimation()
     {
         transform.DOKill(true);
 
         Sequence seq = DOTween.Sequence();
-        seq.SetTarget(transform);
+        seq.Append(transform
+            .DORotate(new Vector3(0, 0, -75f), 0.06f)
+            .SetEase(Ease.InQuad));
 
-        seq.Append(transform.DOScale(0.88f, 0.05f));
-        seq.Append(transform.DOScale(1f, 0.12f).SetEase(Ease.OutBack));
+        seq.Append(transform
+            .DORotate(new Vector3(0, 0, 10f), 0.08f)
+            .SetEase(Ease.OutQuad));
 
-        transform.DOShakePosition(0.15f, 8f, 25, 70);
+        seq.Append(transform
+            .DORotate(Vector3.zero, 0.12f)
+            .SetEase(Ease.OutBack));
     }
 
 
@@ -81,9 +87,11 @@ public class Block : MonoBehaviour
     {
         transform.DOKill(true);
 
-        ScoreManager.Instance.AddScore(reward);
+        int finalReward = reward + GameModifiers.Instance.bonusScorePerBlock;
+        ScoreManager.Instance.AddScore(finalReward);
+
         FloatingTextSpawner.Instance.Spawn(
-            reward,
+            finalReward,
             transform.position
         );
 

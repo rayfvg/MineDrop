@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class RunManager : MonoBehaviour
 {
@@ -28,11 +29,25 @@ public class RunManager : MonoBehaviour
 
     public void TryFinishRun()
     {
-        // ❗ если есть фриспины — НЕЛЬЗЯ заканчивать ран
         if (GridManager.Instance.FreeSpins > 0)
             return;
 
-        FinishRun();
+        StartCoroutine(FinishRunDelayed());
+    }
+
+    IEnumerator FinishRunDelayed()
+    {
+        yield return new WaitForSeconds(0.6f); // 🔥 пауза осознания
+
+        int score = ScoreManager.Instance.Score;
+        int debt = DebtManager.Instance.currentDebt;
+
+        DebtManager.Instance.SaveRecord(score);
+
+        if (score >= debt)
+            GameStateManager.Instance.Victory();
+        else
+            GameStateManager.Instance.Lose();
     }
 
     void FinishRun()

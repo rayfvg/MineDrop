@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
@@ -14,28 +14,73 @@ public class SlotItem : MonoBehaviour
 
     public void SetRandom(SymbolConfig[] symbols)
     {
-        CurrentSymbol = WeightedRandom.GetRandom(symbols);
+        float total = 0f;
 
-        if (CurrentSymbol.isEmpty)
+        foreach (var s in symbols)
         {
-            image.enabled = false;
-            amountText.text = "";
-            return;
+            float w = GetModifiedWeight(s);
+            total += w;
         }
 
-        image.enabled = true;
-        image.sprite = CurrentSymbol.sprite;
+        float roll = Random.Range(0f, total);
+        float current = 0f;
 
-        if (CurrentSymbol.hasAmount)
+        foreach (var s in symbols)
         {
-            Amount = Random.Range(1, 6);
-            amountText.text = Amount.ToString();
+            current += GetModifiedWeight(s);
+            if (roll <= current)
+            {
+                SetSymbol(s);
+                return;
+            }
+        }
+    }
+
+    void SetSymbol(SymbolConfig s)
+    {
+        CurrentSymbol = s;
+
+        if (s.hasAmount)
+        {
+            Amount = Random.Range(1, 6); // 🔥 ВОЗВРАЩАЕМ
         }
         else
         {
-            Amount = 0;
-            amountText.text = "";
+            Amount = 1;
         }
+
+        if (image != null)
+        {
+            image.enabled = true;
+            image.sprite = s.sprite;
+        }
+
+        if (amountText != null)
+        {
+            amountText.text = Amount > 1 ? Amount.ToString() : "";
+        }
+    }
+
+    float GetModifiedWeight(SymbolConfig s)
+    {
+        float w = s.weight;
+
+        if (s.id == "Eye")
+            w += GameModifiers.Instance.eyeChanceBonus;
+
+        if (s.id == "Book")
+            w += GameModifiers.Instance.bookChanceBonus;
+
+        if (s.id == "Dynamite")
+            w += GameModifiers.Instance.dynamiteChanceBonus;
+
+        if (s.id == "PickaxeDiamond")
+            w += GameModifiers.Instance.diamondPickaxeChanceBonus;
+
+        if (s.isEmpty)
+            w = Mathf.Max(0f, w - GameModifiers.Instance.reduceEmptyChance);
+
+        return Mathf.Max(0.01f, w);
     }
 
 }

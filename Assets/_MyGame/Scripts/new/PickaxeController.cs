@@ -18,11 +18,11 @@ public class PickaxeController : MonoBehaviour
     public void Init(SymbolConfig symbol, int hits)
     {
         config = symbol;
-        damage = symbol.damage + GameModifiers.Instance.bonusDamage;
-        hitsLeft = hits + GameModifiers.Instance.extraHits;
+
+        damage = symbol.damage + GameModifiers.Instance.bonusPickaxeDamage;
+        hitsLeft = hits;
 
         GetComponent<UnityEngine.UI.Image>().sprite = symbol.sprite;
-
         StartCoroutine(FailsafeTimeout());
     }
 
@@ -70,14 +70,17 @@ public class PickaxeController : MonoBehaviour
         if (block == null)
             yield break;
 
-        // 🔥 НАНОСИМ УРОН СРАЗУ
         block.TakeHit(damage);
         hitsLeft--;
 
         PlayHitAnimation();
 
+        // 🔥 ОБЯЗАТЕЛЬНО ждём хотя бы кадр
+        yield return null;
+
         if (hitsLeft <= 0)
         {
+            yield return new WaitForSeconds(0.12f); // длина первого удара
             Finish();
         }
         else
@@ -99,10 +102,11 @@ public class PickaxeController : MonoBehaviour
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
 
         rb.velocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+
         rb.AddForce(Vector2.up * 6f, ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(0.1f);
-
         hasHitThisFall = false;
     }
 
@@ -139,5 +143,4 @@ public class PickaxeController : MonoBehaviour
             .DORotate(Vector3.zero, 0.12f)
             .SetEase(Ease.OutBack));
     }
-
 }

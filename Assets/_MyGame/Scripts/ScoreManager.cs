@@ -20,12 +20,7 @@ public class ScoreManager : MonoBehaviour
 
     public void AddScore(int baseAmount)
     {
-        int finalAmount =
-    Mathf.RoundToInt(baseAmount *
-    Multiplier *
-    GameModifiers.Instance.scoreMultiplier);
-
-        Score += finalAmount;
+        Score += baseAmount;
         UpdateUI();
     }
 

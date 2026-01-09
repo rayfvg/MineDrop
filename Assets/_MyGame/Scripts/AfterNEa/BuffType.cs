@@ -1,9 +1,10 @@
 public enum BuffType
 {
     PickaxeDamage,
-    ExtraHit,
-    ScoreMultiplier,
-    PickaxeChance,
     EyeChance,
-    FreeSpin
+    BookChance,
+    DynamiteChance,
+    DiamondPickaxeChance,
+    ReduceEmpty,
+    ScorePerBlock
 }

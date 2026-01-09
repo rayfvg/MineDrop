@@ -16,31 +16,34 @@ public class BuffApplier : MonoBehaviour
         switch (buff.type)
         {
             case BuffType.PickaxeDamage:
-                m.bonusDamage += (int)buff.value;
-                break;
-
-            case BuffType.ExtraHit:
-                m.extraHits += (int)buff.value;
-                break;
-
-            case BuffType.ScoreMultiplier:
-                m.scoreMultiplier += buff.value;
-                break;
-
-            case BuffType.PickaxeChance:
-                m.extraPickaxeChance += buff.value;
+                m.bonusPickaxeDamage += (int)buff.value;
                 break;
 
             case BuffType.EyeChance:
-                m.extraEyeChance += buff.value;
+                m.eyeChanceBonus += buff.value;
                 break;
 
-            case BuffType.FreeSpin:
-                m.extraFreeSpins += (int)buff.value;
+            case BuffType.BookChance:
+                m.bookChanceBonus += buff.value;
+                break;
+
+            case BuffType.DynamiteChance:
+                m.dynamiteChanceBonus += buff.value;
+                break;
+
+            case BuffType.DiamondPickaxeChance:
+                m.diamondPickaxeChanceBonus += buff.value;
+                break;
+
+            case BuffType.ReduceEmpty:
+                m.reduceEmptyChance += buff.value;
+                break;
+
+            case BuffType.ScorePerBlock:
+                m.bonusScorePerBlock += (int)buff.value;
                 break;
         }
 
-        // ⬅ ВАЖНО: НЕ стартуем игру тут
-        GameStateManager.Instance.GoToMenu();
+        GameStateManager.Instance.StartGame();
     }
 }
