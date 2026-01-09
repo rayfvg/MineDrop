@@ -19,6 +19,11 @@ public class GameStateManager : MonoBehaviour
         GoToMenu();
     }
 
+    public void SetState(GameState newState)
+    {
+        State = newState;
+    }
+
     public void GoToMenu()
     {
         State = GameState.Menu;

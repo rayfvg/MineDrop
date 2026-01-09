@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -5,12 +6,11 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance;
 
-    public int Score { get; private set; }
-    public int Multiplier { get; private set; } = 1;
+    public int BaseScore { get; private set; }
+    public List<int> pendingMultipliers = new();
 
     [Header("UI")]
     public TMP_Text scoreText;
-    public TMP_Text multiplierText;
 
     void Awake()
     {
@@ -18,31 +18,28 @@ public class ScoreManager : MonoBehaviour
         UpdateUI();
     }
 
-    public void AddScore(int baseAmount)
+    public void AddScore(int value)
     {
-        Score += baseAmount;
+        BaseScore += value;
         UpdateUI();
     }
 
-    public void AddMultiplier(int value)
+    public void ApplyMultiplier(int multiplier)
     {
-        Multiplier *= value;
+        BaseScore *= multiplier;
         UpdateUI();
     }
 
     void UpdateUI()
     {
         if (scoreText != null)
-            scoreText.text = Score.ToString();
-
-        if (multiplierText != null)
-            multiplierText.text = "x" + Multiplier;
+            scoreText.text = BaseScore.ToString();
     }
 
     public void ResetScore()
     {
-        Score = 0;
-        Multiplier = 1;
+        BaseScore = 0;
+        pendingMultipliers.Clear();
         UpdateUI();
     }
 }

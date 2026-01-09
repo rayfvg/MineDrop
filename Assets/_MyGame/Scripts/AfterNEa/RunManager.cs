@@ -32,27 +32,44 @@ public class RunManager : MonoBehaviour
         if (GridManager.Instance.FreeSpins > 0)
             return;
 
-        StartCoroutine(FinishRunDelayed());
+        StartCoroutine(FinishRunFlow());
     }
 
-    IEnumerator FinishRunDelayed()
+    IEnumerator FinishRunFlow()
     {
-        yield return new WaitForSeconds(0.6f); // 🔥 пауза осознания
+        yield return new WaitForSeconds(0.4f);
 
-        int score = ScoreManager.Instance.Score;
-        int debt = DebtManager.Instance.currentDebt;
+        if (ScoreManager.Instance.pendingMultipliers.Count > 0)
+        {
+            yield return StartCoroutine(PlayChestMultipliers());
+        }
 
-        DebtManager.Instance.SaveRecord(score);
+        FinishRun();
+    }
 
-        if (score >= debt)
-            GameStateManager.Instance.Victory();
-        else
-            GameStateManager.Instance.Lose();
+    IEnumerator PlayChestMultipliers()
+    {
+        GameStateManager.Instance.SetState(GameState.Paused);
+
+        foreach (int mult in ScoreManager.Instance.pendingMultipliers)
+        {
+            FloatingTextSpawner.Instance.SpawnMultiplier(mult, Vector3.zero);
+
+            yield return new WaitForSeconds(0.4f);
+
+            ScoreManager.Instance.ApplyMultiplier(mult);
+
+            yield return new WaitForSeconds(0.3f);
+        }
+
+        ScoreManager.Instance.pendingMultipliers.Clear();
+
+        GameStateManager.Instance.SetState(GameState.Playing);
     }
 
     void FinishRun()
     {
-        int score = ScoreManager.Instance.Score;
+        int score = ScoreManager.Instance.BaseScore;
         int debt = DebtManager.Instance.currentDebt;
 
         DebtManager.Instance.SaveRecord(score);

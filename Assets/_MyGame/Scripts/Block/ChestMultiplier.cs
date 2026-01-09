@@ -65,8 +65,7 @@ public class ChestMultiplier : MonoBehaviour
         closedVisual.SetActive(false);
         openedVisual.SetActive(true);
 
-        // ✅ множитель УМНОЖАЕТСЯ, а не затирается
-        ScoreManager.Instance.AddMultiplier(multiplier);
+        ScoreManager.Instance.ApplyMultiplier(multiplier);
 
         FloatingTextSpawner.Instance.SpawnMultiplier(
             multiplier,

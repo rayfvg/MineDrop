@@ -9,6 +9,8 @@ public class DynamiteController : MonoBehaviour
     bool hasLanded;
     bool finished;
 
+    public float maxLifeTime = 2.5f;
+
     public System.Action<DynamiteController> OnFinished;
 
     Rigidbody2D rb;
@@ -16,6 +18,21 @@ public class DynamiteController : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+    }
+
+    void Start()
+    {
+        StartCoroutine(AutoFinish());
+    }
+
+    IEnumerator AutoFinish()
+    {
+        yield return new WaitForSeconds(maxLifeTime);
+
+        if (!finished)
+        {
+            Finish();
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)

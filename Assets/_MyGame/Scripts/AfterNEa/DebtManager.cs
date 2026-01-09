@@ -1,4 +1,4 @@
-using TMPro;
+п»їusing TMPro;
 using UnityEngine;
 
 public class DebtManager : MonoBehaviour
@@ -9,9 +9,9 @@ public class DebtManager : MonoBehaviour
     public int startDebt = 100;
 
     public AnimationCurve debtGrowthCurve;
-    // X = номер победы (0,1,2,3…)
-    // Y = множитель
-
+    // X = РЅРѕРјРµСЂ РїРѕР±РµРґС‹ (0,1,2,3вЂ¦)
+    // Y = РјРЅРѕР¶РёС‚РµР»СЊ
+    public float debtGrowthPerWin = 1.35f;
     int winsCount;
     const string WinsKey = "WINS";
 
@@ -36,8 +36,8 @@ public class DebtManager : MonoBehaviour
 
     public void UpdateUI()
     {
-        debtText.text = $"Ваш долг составляет:\n{currentDebt}";
-        recordText.text = $"Рекорд: {PlayerPrefs.GetInt(RecordKey, 0)}";
+        debtText.text = $"Р’Р°С€ РґРѕР»Рі СЃРѕСЃС‚Р°РІР»СЏРµС‚:\n{currentDebt}";
+        recordText.text = $"Р РµРєРѕСЂРґ: {PlayerPrefs.GetInt(RecordKey, 0)}";
     }
 
     public void IncreaseDebt()
@@ -45,11 +45,12 @@ public class DebtManager : MonoBehaviour
         winsCount++;
         PlayerPrefs.SetInt(WinsKey, winsCount);
 
-        float multiplier = debtGrowthCurve.Evaluate(winsCount);
-        currentDebt = Mathf.RoundToInt(startDebt * multiplier);
+        currentDebt = Mathf.RoundToInt(startDebt * Mathf.Pow(debtGrowthPerWin, winsCount));
 
         PlayerPrefs.SetInt(DebtKey, currentDebt);
         PlayerPrefs.Save();
+
+        UpdateUI();
     }
 
     public void SaveRecord(int score)
