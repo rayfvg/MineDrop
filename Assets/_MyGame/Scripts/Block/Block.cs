@@ -87,7 +87,7 @@ public class Block : MonoBehaviour
     {
         transform.DOKill(true);
 
-        int finalReward = reward + GameModifiers.Instance.bonusScorePerBlock;
+        int finalReward = reward;
         ScoreManager.Instance.AddScore(finalReward);
 
         FloatingTextSpawner.Instance.Spawn(

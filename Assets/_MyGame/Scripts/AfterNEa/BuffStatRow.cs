@@ -5,13 +5,13 @@ public class BuffStatRow : MonoBehaviour
 {
     public TMP_Text titleText;
     public TMP_Text valueText;
-
-    public string buffId;
+    public string symbolId;
 
     public void Refresh()
     {
-        float value = BuffStatsProvider.GetValue(buffId);
-        valueText.text = value.ToString("0.##");
-        valueText.color = BuffColorHelper.GetColor(value);
+        var chances = GridManager.Instance.GetCurrentChances();
+
+        if (chances.TryGetValue(symbolId, out float value))
+            valueText.text = value.ToString("0.0") + "%";
     }
 }

@@ -30,7 +30,7 @@ public class ScoreManager : MonoBehaviour
         UpdateUI();
     }
 
-    void UpdateUI()
+    public void UpdateUI()
     {
         if (scoreText != null)
             scoreText.text = BaseScore.ToString();

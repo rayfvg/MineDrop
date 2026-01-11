@@ -19,7 +19,7 @@ public class PickaxeController : MonoBehaviour
     {
         config = symbol;
 
-        damage = symbol.damage + GameModifiers.Instance.bonusPickaxeDamage;
+        damage = symbol.damage;
         hitsLeft = hits;
 
         GetComponent<UnityEngine.UI.Image>().sprite = symbol.sprite;

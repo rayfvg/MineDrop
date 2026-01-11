@@ -5,8 +5,7 @@ public class BuffManager : MonoBehaviour
 {
     public static BuffManager Instance;
 
-    [Header("ALL AVAILABLE BUFFS")]
-    public List<BuffData> allBuffs = new();
+    public List<BuffData> allBuffs;
 
     void Awake()
     {
@@ -26,5 +25,6 @@ public class BuffManager : MonoBehaviour
         }
 
         return result;
+
     }
 }

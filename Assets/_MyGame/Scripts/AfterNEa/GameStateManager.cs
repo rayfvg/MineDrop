@@ -16,6 +16,14 @@ public class GameStateManager : MonoBehaviour
     void Awake()
     {
         Instance = this;
+
+        // 🔥 краткая инициализация грида
+        if (!gameCanvas.activeSelf)
+        {
+            gameCanvas.SetActive(true);
+            gameCanvas.SetActive(false);
+        }
+
         GoToMenu();
     }
 
@@ -32,7 +40,7 @@ public class GameStateManager : MonoBehaviour
         loseCanvas.SetActive(false);
         victoryCanvas.SetActive(false);
 
-        GameModifiers.Instance.ResetAll();
+        //GameModifiers.Instance.ResetAll();
 
         DebtManager.Instance.UpdateUI();
     }

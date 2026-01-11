@@ -17,17 +17,15 @@ public class SlotItem : MonoBehaviour
         float total = 0f;
 
         foreach (var s in symbols)
-        {
-            float w = GetModifiedWeight(s);
-            total += w;
-        }
+            total += SlotWeightCalculator.GetWeight(s);
+
 
         float roll = Random.Range(0f, total);
         float current = 0f;
 
         foreach (var s in symbols)
         {
-            current += GetModifiedWeight(s);
+            current += SlotWeightCalculator.GetWeight(s);
             if (roll <= current)
             {
                 SetSymbol(s);
@@ -61,26 +59,29 @@ public class SlotItem : MonoBehaviour
         }
     }
 
-    float GetModifiedWeight(SymbolConfig s)
-    {
-        float w = s.weight;
+    //float GetModifiedWeight(SymbolConfig s)
+    //{
+    //    float w = SlotWeightCalculator.GetWeight(s);
 
-        if (s.id == "Eye")
-            w += GameModifiers.Instance.eyeChanceBonus;
 
-        if (s.id == "Book")
-            w += GameModifiers.Instance.bookChanceBonus;
+    //    var buffs = GameModifiers.Instance;
 
-        if (s.id == "Dynamite")
-            w += GameModifiers.Instance.dynamiteChanceBonus;
+    //    if (s.id == "PickaxeDiamond")
+    //        w += buffs.diamondPickaxeChanceBonus;
 
-        if (s.id == "PickaxeDiamond")
-            w += GameModifiers.Instance.diamondPickaxeChanceBonus;
+    //    if (s.id == "Book")
+    //        w += buffs.bookChanceBonus;
 
-        if (s.isEmpty)
-            w = Mathf.Max(0f, w - GameModifiers.Instance.reduceEmptyChance);
+    //    if (s.id == "Dynamite")
+    //        w += buffs.dynamiteChanceBonus;
 
-        return Mathf.Max(0.01f, w);
-    }
+    //    if (s.id == "Eye")
+    //        w += buffs.eyeChanceBonus;
+
+    //    if (s.isEmpty)
+    //        w = Mathf.Max(0f, w - buffs.reduceEmptyChance);
+
+    //    return Mathf.Max(0.01f, w);
+    //}
 
 }

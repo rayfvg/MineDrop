@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GridManager : MonoBehaviour
 {
@@ -42,6 +43,29 @@ public class GridManager : MonoBehaviour
                 SlotGridManager.Instance.RegisterSlot(slot, gridPos);
             }
         }
+    }
+
+    public Dictionary<string, float> GetCurrentChances()
+    {
+        Dictionary<string, float> result = new();
+
+        float total = 0f;
+
+        foreach (var s in pickaxes)
+        {
+            float w = SlotWeightCalculator.GetWeight(s);
+            result[s.id] = w;
+            total += w;
+        }
+
+        // переводим в проценты
+        var keys = new List<string>(result.Keys);
+        foreach (var k in keys)
+        {
+            result[k] = result[k] / total * 100f;
+        }
+
+        return result;
     }
 
     public void ResetFreeSpins()

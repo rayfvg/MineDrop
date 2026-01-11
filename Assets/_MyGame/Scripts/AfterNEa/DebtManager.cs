@@ -62,4 +62,16 @@ public class DebtManager : MonoBehaviour
             PlayerPrefs.Save();
         }
     }
+
+    public void ResetAll()
+    {
+        winsCount = 0;
+        currentDebt = startDebt;
+
+        PlayerPrefs.SetInt(WinsKey, winsCount);
+        PlayerPrefs.SetInt(DebtKey, currentDebt);
+        PlayerPrefs.Save();
+
+        UpdateUI();
+    }
 }

@@ -1,17 +1,12 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class BuffButton : MonoBehaviour
 {
     public TMP_Text titleText;
-    public TMP_Text descriptionText;
+    public GameObject fxRoot;
     public Button button;
-
-    [Header("Particles")]
-    public GameObject weakFX;
-    public GameObject mediumFX;
-    public GameObject strongFX;
 
     BuffData buff;
 
@@ -20,27 +15,38 @@ public class BuffButton : MonoBehaviour
         buff = data;
 
         titleText.text = data.title;
-        descriptionText.text = data.description;
 
-        weakFX.SetActive(false);
-        mediumFX.SetActive(false);
-        strongFX.SetActive(false);
+        // FX
+        foreach (Transform c in fxRoot.transform)
+            c.gameObject.SetActive(false);
 
-        switch (data.power)
-        {
-            case BuffPower.Weak: weakFX.SetActive(true); break;
-            case BuffPower.Medium: mediumFX.SetActive(true); break;
-            case BuffPower.Strong: strongFX.SetActive(true); break;
-        }
+        Transform fx = fxRoot.transform.Find(data.particleId);
+        if (fx != null)
+            fx.gameObject.SetActive(true);
+        else
+            Debug.LogWarning($"❌ FX {data.particleId} не найден");
 
+        // 🔥 ВАЖНО
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(Apply);
     }
 
     void Apply()
     {
-        BuffApplier.Instance.Apply(buff);
+        if (buff == null)
+        {
+            Debug.LogError("❌ BuffButton.Apply вызван, но buff == null");
+            return;
+        }
+
+        GameModifiers.Instance.AddModifier(
+            buff.symbolId,
+            buff.weightDelta
+        );
+
         BuffSelectionUI.Instance.Hide();
         GameStateManager.Instance.GoToMenu();
+
+        ChanceTableUI.Instance.Refresh();
     }
 }
