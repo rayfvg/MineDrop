@@ -15,6 +15,7 @@ public class DynamiteController : MonoBehaviour
 
     Rigidbody2D rb;
 
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -71,6 +72,11 @@ public class DynamiteController : MonoBehaviour
 
         // 3️⃣ взрыв
         transform.DOScale(0f, 0.15f).SetEase(Ease.InBack);
+
+        SoundManager.Instance.Play(
+    SoundManager.Instance.dynamiteExplosion,
+    1f
+);
 
         block.TakeHit(damage);
 

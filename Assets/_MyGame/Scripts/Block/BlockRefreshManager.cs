@@ -42,8 +42,13 @@ public class BlockRefreshManager : MonoBehaviour
             FindObjectOfType<BlockContainer>();
 
         container.FillAll();
+
+        // 🔥 ВОТ ЭТОГО НЕ ХВАТАЛО
+        ChestManager.Instance.ResetAll();
+
         GiveBonus();
     }
+
 
     public void RefreshFieldFirst()
     {

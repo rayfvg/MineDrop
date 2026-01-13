@@ -39,7 +39,7 @@ public class BlockRow : MonoBehaviour
             block.Init(selected.hp, selected.reward);
 
             // ✅ РЕГИСТРАЦИЯ
-            BlockRefreshManager.Instance.Register(block);
+            //BlockRefreshManager.Instance.Register(block);
         }
     }
 

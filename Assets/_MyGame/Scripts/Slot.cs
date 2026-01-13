@@ -124,6 +124,8 @@ public class Slot : MonoBehaviour
         currentSpeed = startSpeed;
         isRolling = true;
 
+        SlotSFXManager.Instance.OnSlotStart();
+
         DOTween.To(
             () => currentSpeed,
             x => currentSpeed = x,
@@ -166,6 +168,8 @@ public class Slot : MonoBehaviour
     void StopRoll()
     {
         isRolling = false;
+
+        SlotSFXManager.Instance.OnSlotStop();
 
         float snapY = Mathf.Round(reel.anchoredPosition.y / itemHeight) * itemHeight;
 

@@ -71,6 +71,7 @@ public class GridManager : MonoBehaviour
     public void ResetFreeSpins()
     {
         freeSpins = 0;
+
     }
 
     void Update()
@@ -82,9 +83,22 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    public void AddFreeSpins(int count)
+    public void StartGameButton()
     {
-        freeSpins += count;
+        if (RunManager.Instance.CanSpin() == false)
+            return;
+
+        RunManager.Instance.MarkSpinUsed();
+        StartCoroutine(RollByColumns());
+    }
+
+    public void AddFreeSpin()
+    {
+        // ❗ если фриспин уже есть — игнорируем
+        if (freeSpins > 0)
+            return;
+
+        freeSpins = 1;
 
         if (!isRolling)
             StartCoroutine(RollByColumns());
@@ -113,6 +127,10 @@ public class GridManager : MonoBehaviour
         if (freeSpins > 0)
         {
             freeSpins--;
+
+            // 👇 один фриспин закончился
+            GameSpeedManager.Instance.OnFreeSpinEnded();
+
             yield return new WaitForSeconds(0.25f);
             StartCoroutine(RollByColumns());
         }

@@ -65,6 +65,10 @@ public class ChestMultiplier : MonoBehaviour
         closedVisual.SetActive(false);
         openedVisual.SetActive(true);
 
+        SoundManager.Instance.Play(
+    SoundManager.Instance.OpenChest,
+    0.8f);
+
         ScoreManager.Instance.ApplyMultiplier(multiplier);
 
         FloatingTextSpawner.Instance.SpawnMultiplier(

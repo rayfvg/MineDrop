@@ -61,6 +61,11 @@ public class PickaxeController : MonoBehaviour
         if (finished) return;
         finished = true;
 
+        SoundManager.Instance.Play(
+       SoundManager.Instance.pickaxeBreak,
+       0.6f
+   );
+
         OnFinished?.Invoke(this);
         Destroy(gameObject);
     }
@@ -71,6 +76,12 @@ public class PickaxeController : MonoBehaviour
             yield break;
 
         block.TakeHit(damage);
+
+        SoundManager.Instance.Play(
+    SoundManager.Instance.pickaxeHit,
+    0.8f);
+
+
         hitsLeft--;
 
         PlayHitAnimation();

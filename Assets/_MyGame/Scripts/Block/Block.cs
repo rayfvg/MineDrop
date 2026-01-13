@@ -39,11 +39,23 @@ public class Block : MonoBehaviour
 
         if (currentHP > 0)
         {
+
+            SoundManager.Instance.Play(
+       SoundManager.Instance.blockHit,
+       0.7f
+   );
+
             PlayHitAnimation();
             UpdateVisual();
         }
         else
         {
+
+            SoundManager.Instance.Play(
+       SoundManager.Instance.blockDestroy,
+       1f
+   );
+
             isDestroyed = true;
             DestroyBlock();
         }

@@ -28,7 +28,7 @@ public class EyePhaseManager : MonoBehaviour
     {
         Time.timeScale = 0f;
 
-        labelText.text = $"+{eyeCount}\n{baseText}";
+        labelText.text = baseText;
 
         canvasGroup.alpha = 1;
         labelTransform.localScale = Vector3.zero;

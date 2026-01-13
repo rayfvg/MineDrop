@@ -11,6 +11,9 @@ public class GameStateManager : MonoBehaviour
 
     public UIAnimatedPopup losePopup;
     public UIAnimatedPopup victoryPopup;
+
+    public AudioSource LoseMusic;
+    public AudioSource WinMisic;
     public GameState State { get; private set; }
 
     void Awake()
@@ -35,6 +38,11 @@ public class GameStateManager : MonoBehaviour
     public void GoToMenu()
     {
         State = GameState.Menu;
+
+        GameSpeedManager.Instance.ResetSpeed();
+
+        MusicManager.Instance.PlayMenu(); // 🎵 МЕНЮ
+
         menuCanvas.SetActive(true);
         gameCanvas.SetActive(false);
         loseCanvas.SetActive(false);
@@ -48,6 +56,8 @@ public class GameStateManager : MonoBehaviour
     public void StartGame()
     {
         State = GameState.Playing;
+
+        MusicManager.Instance.PlayGame(); // 🎮 ИГРА
 
         menuCanvas.SetActive(false);
         gameCanvas.SetActive(true);
@@ -65,6 +75,7 @@ public class GameStateManager : MonoBehaviour
     {
         State = GameState.Lose;
         losePopup.Show();
+        LoseMusic.Play();
     }
 
 
@@ -76,6 +87,7 @@ public class GameStateManager : MonoBehaviour
         victoryPopup.Show();
 
         BuffSelectionUI.Instance.Show();
+        WinMisic.Play();
     }
 
 

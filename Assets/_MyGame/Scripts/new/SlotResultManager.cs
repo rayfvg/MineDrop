@@ -15,6 +15,8 @@ public class SlotResultManager : MonoBehaviour
 
     public GridManager gridManager;
 
+    public AudioSource EYE;
+    public AudioSource Book;
 
     public bool IsRunFinished { get; private set; }
     void Awake()
@@ -89,6 +91,7 @@ public class SlotResultManager : MonoBehaviour
         if (HasBook())
         {
             Debug.Log("📘 ЭТАП КНИГИ: улучшение кирок");
+            Book.Play();
             yield return StartCoroutine(BookPhase());
         }
         else
@@ -123,6 +126,7 @@ public class SlotResultManager : MonoBehaviour
             if (eyes > 0)
             {
                 currentPhase = RunPhase.Eye;
+                EYE.Play();
                 Debug.Log($"👁 ЭТАП ГЛАЗА: {eyes} фриспинов");
 
                 // 👁 АНИМИРУЕМ ВСЕ ГЛАЗА В СЛОТАХ
@@ -143,7 +147,9 @@ public class SlotResultManager : MonoBehaviour
                 );
 
                 // 🔁 ДОБАВЛЯЕМ ФРИСПИНЫ
-                gridManager.AddFreeSpins(eyes);
+                gridManager.AddFreeSpin();
+                // 🔥 УСКОРЯЕМ ИГРУ
+                GameSpeedManager.Instance.OnFreeSpinTriggered();
             }
         }
 
