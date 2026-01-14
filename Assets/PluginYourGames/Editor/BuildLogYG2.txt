@@ -1,0 +1,3 @@
+﻿Build path: C:/GitHubGame/MineDrop/Building/3
+Build number: 0
+PluginYG version: 2.007

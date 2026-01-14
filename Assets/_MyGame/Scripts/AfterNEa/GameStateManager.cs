@@ -90,6 +90,16 @@ public class GameStateManager : MonoBehaviour
         WinMisic.Play();
     }
 
+    public void VictoryAfterAds()
+    {
+        State = GameState.Victory;
+
+        victoryPopup.Show();
+
+        BuffSelectionUI.Instance.Show();
+        WinMisic.Play();
+    }
+
 
     public bool CanStartSpin()
     {
