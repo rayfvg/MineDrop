@@ -1293,7 +1293,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.34
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -5634,7 +5634,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.44
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -7073,7 +7073,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1013155782
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10423,7 +10423,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: ba4fe473a91136345922e2d322c78668, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.452
+  m_Volume: 0.26
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -10618,7 +10618,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: dfa88ae48ba8bd5468d65b8ca99a9553, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.517
+  m_Volume: 0.64
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -11651,7 +11651,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.591
+  m_Volume: 0.71
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -13425,7 +13425,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 06baa6cfaa4b9c541ac4f10d820f90d4, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.54
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -13843,10 +13843,11 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "\u042D\u0442\u043E \u0431\u0435\u0437\u043E\u0431\u0438\u0434\u043D\u044B\u0439
-    \u0441\u0438\u043C\u0443\u043B\u044F\u0442\u043E\u0440 \u043A\u0430\u0437\u0438\u043D\u043E.\n\u0412\u0430\u0448\u0430
-    \u0437\u0430\u0434\u0430\u0447\u0430 \u043D\u0430\u0431\u0440\u0430\u0442\u044C
-    \u0434\u043E\u0441\u0442\u0430\u0442\u043E\u0447\u043D\u043E \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E
-    \u043E\u0447\u043A\u043E\u0432, \u0447\u0442\u043E\u0431\u044B \u043F\u043E\u0433\u0430\u0441\u0442\u0438\u0442\u044C
+    \u0441\u0438\u043C\u0443\u043B\u044F\u0442\u043E\u0440 \u0434\u043E\u0431\u044B\u0447\u0438
+    \u0440\u0435\u0441\u0443\u0440\u0441\u043E\u0432.\n\u0412\u0430\u0448\u0430 \u0437\u0430\u0434\u0430\u0447\u0430
+    \u043D\u0430\u0431\u0440\u0430\u0442\u044C \u0434\u043E\u0441\u0442\u0430\u0442\u043E\u0447\u043D\u043E
+    \u043A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u043E\u0447\u043A\u043E\u0432,
+    \u0447\u0442\u043E\u0431\u044B \u043F\u043E\u0433\u0430\u0441\u0442\u0438\u0442\u044C
     \u0434\u043E\u043B\u0433."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: d68954c0229e8a64eb1747e674b6e65a, type: 2}
@@ -13874,7 +13875,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
+  m_fontSize: 70.9
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1

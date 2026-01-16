@@ -30,7 +30,7 @@ public class SlotSFXManager : MonoBehaviour
         {
             loopSource.clip = spinLoop;
             loopSource.loop = true;
-            loopSource.volume = 0.25f;
+            loopSource.volume = 0.15f;
             loopSource.Play();
         }
 
@@ -42,7 +42,7 @@ public class SlotSFXManager : MonoBehaviour
     {
         activeSlots--;
 
-        oneShotSource.PlayOneShot(stop, 0.5f);
+        oneShotSource.PlayOneShot(stop, 0.2f);
 
         if (activeSlots <= 0)
         {
